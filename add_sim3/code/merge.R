@@ -1,15 +1,20 @@
+# library
+library(here)
+
+# set working directory
+setwd(here::here("output"))
+
 # parameters
 ns <- c(2000, 4000)
 seed <- 1:1000
 parm <- expand.grid(n = ns, seed = seed)
 
-save_dir <- "/Users/scarlett/Desktop/nonparametric/submission2" 
 n_out <- 157
 
 rslt <- matrix(NA, nrow = nrow(parm), ncol = n_out)
 for(i in 1:nrow(parm)){
   tmp <- tryCatch({
-    load(paste0(save_dir, "/all_fits/jialufit_", i, ".RData"))
+    get(load(here::here("output", paste0("fit_", i, ".RData"))))
     out
   }, error = function(e){
     rep(NA, n_out)
@@ -59,8 +64,6 @@ colnames(out) <- c("n", "seed",
                    "total_gcomp_cover2", "direct_gcomp_cover2", "indirectM1_gcomp_cover2", "indirectM2_gcomp_cover2", "covarM1M2_gcomp_cover2",
                    "truth_total", "truth_direct", "truth_indirectM1", "truth_indirectM2", "truth_covarM1M2"
 ) 
-
-save(out, file = "/Users/scarlett/Desktop/nonparametric/submission2/all_out_intermed_new1.RData")
 
 get_bias <- function(out, which_eff = "total"){
   by(out, out$n, function(x){
@@ -266,8 +269,6 @@ format_out <- function(out, summary_fn,
   }
 }
 
-load("/Users/scarlett/Desktop/nonparametric/submission2/all_out_intermed_new1.RData")
-
 all_bias <- format_out(out, "get_bias")
 all_rootnbias <- format_out(out, "get_rootnbias")
 all_mse <- format_out(out, "get_mse")
@@ -344,7 +345,7 @@ plot_one_est_row <- function(which_eff = "total",
 }
 
 # plot results for point estimates
-pdf("/Users/scarlett/Desktop/nonparametric/submission2/estimation_new1.pdf", height = 7, width = 7)
+pdf(here::here("output", paste0("estimation.pdf")), height = 7, width = 7)
 layout(matrix(c(1, 1, 1, 2:13), nrow =5, byrow = TRUE),
        heights = c(0.25, 1, 1, 1, 1))
 par(oma = c(0, 2.1, 0, 0), mar = c(2.9, 2.9, 0.1, 0.1), mgp = c(1.8, 0.5, 0))

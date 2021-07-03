@@ -27,8 +27,10 @@ seed <- 1:1000
 parm <- expand.grid(n = ns, seed = seed)
 
 # save directory
-save_dir <- "~/intermed/out/"
-code_dir <- "~/intermed/"
+path = "..."
+
+save_dir <- paste0(path, "/output")
+code_dir <- paste0(path, "/code")
 
 # load packages
 library(SuperLearner)
@@ -387,7 +389,7 @@ if (args[1] == 'run') {
                     "total_gcomp_cover2", "direct_gcomp_cover2", "indirectM1_gcomp_cover2", "indirectM2_gcomp_cover2", "covarM1M2_gcomp_cover2",
                     "true_total", "true_direct", "true_indirectM1", "true_indirectM2", "true_covarM1M2"
     ) 
-    save(out, file = paste0("~/intermed/out/jialufit_", i, ".RData"))
+    save(out, file = paste0(save_dir, "fit_", i, ".RData"))
   }
 }
 
